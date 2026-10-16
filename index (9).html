@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta name="theme-color" content="#0b1224">
+<title>ProofCheck AI | Cybersecurity Checker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#dashboard" data-page="dashboard">
+      <span class="brand-icon">✓</span>
+      <span>ProofCheck <b>AI</b></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+    <nav id="navigation">
+      <button class="nav-link active" data-page="dashboard">Dashboard</button>
+      <button class="nav-link" data-page="message">Message Analyzer</button>
+      <button class="nav-link" data-page="url">URL Checker</button>
+      <button class="nav-link" data-page="ocr">Screenshot OCR</button>
+      <button class="nav-link" data-page="history">History</button>
+      <button class="nav-link" data-page="tips">Security Tips</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="page active" id="dashboard">
+      <div class="hero">
+        <div>
+          <span class="eyebrow">CYBERSECURITY ASSISTANT</span>
+          <h1>Stay one step ahead of scams.</h1>
+          <p>Check suspicious messages, links, and screenshot text for common warning signs.</p>
+          <button class="primary-btn" data-go="message">Analyze a message →</button>
+        </div>
+        <div class="hero-mark">✓</div>
+      </div>
+
+      <div class="notice">
+        <strong>Important:</strong> ProofCheck AI uses local, rule-based checks. It does not verify websites against a live threat database, and a low-risk result does not prove something is safe.
+      </div>
+
+      <h2 class="section-title">Your dashboard</h2>
+      <div class="stats-grid">
+        <article class="stat-card"><span>Total analyses</span><strong id="statTotal">0</strong><small>Checks saved on this device</small></article>
+        <article class="stat-card"><span>High-risk results</span><strong id="statHigh">0</strong><small>Results marked high risk</small></article>
+        <article class="stat-card"><span>Messages checked</span><strong id="statMessages">0</strong><small>Message analysis runs</small></article>
+        <article class="stat-card"><span>URLs checked</span><strong id="statUrls">0</strong><small>Link analysis runs</small></article>
+      </div>
+
+      <h2 class="section-title">Quick tools</h2>
+      <div class="tool-grid">
+        <button class="tool-card" data-go="message"><span class="tool-icon">✉</span><strong>Message Analyzer</strong><span>Find common scam warning signs.</span></button>
+        <button class="tool-card" data-go="url"><span class="tool-icon">↗</span><strong>URL Checker</strong><span>Inspect a link for suspicious patterns.</span></button>
+        <button class="tool-card" data-go="ocr"><span class="tool-icon">▧</span><strong>Screenshot OCR</strong><span>Extract text from an image and check it.</span></button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-heading"><h2>Recent activity</h2><button class="text-btn" data-go="history">View history →</button></div>
+        <div id="recentActivity" class="empty-state">No analyses yet. Try one of the tools above.</div>
+      </div>
+    </section>
+
+    <section class="page" id="message">
+      <div class="page-heading"><span class="eyebrow">TEXT ANALYSIS</span><h1>Message Analyzer</h1><p>Paste an SMS, email, chat message, or other suspicious text.</p></div>
+      <div class="panel">
+        <label for="messageInput">Message to check</label>
+        <textarea id="messageInput" rows="8" placeholder="Example: Your account will be blocked today. Click this link and verify your password immediately..."></textarea>
+        <div class="input-footer"><span id="messageCount">0 characters</span><button class="text-btn" id="clearMessage">Clear</button></div>
+        <button class="primary-btn full-btn" id="analyzeMessage">Analyze message</button>
+        <div id="messageResult" class="result-slot" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="page" id="url">
+      <div class="page-heading"><span class="eyebrow">LINK INSPECTION</span><h1>URL Checker</h1><p>Inspect the structure of a link without opening it.</p></div>
+      <div class="panel">
+        <label for="urlInput">Website URL</label>
+        <input id="urlInput" type="text" inputmode="url" autocomplete="off" placeholder="https://example.com">
+        <p class="helper-text">Do not open suspicious links just to test them. This tool checks URL patterns locally.</p>
+        <button class="primary-btn full-btn" id="analyzeUrl">Check URL</button>
+        <div id="urlResult" class="result-slot" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="page" id="ocr">
+      <div class="page-heading"><span class="eyebrow">IMAGE TEXT EXTRACTION</span><h1>Screenshot OCR</h1><p>Upload a screenshot to extract text and check for possible scam indicators.</p></div>
+      <div class="panel">
+        <label for="imageInput" class="upload-box">
+          <span class="upload-symbol">▧</span>
+          <strong>Choose a screenshot</strong>
+          <span>JPG, PNG, or WEBP image</span>
+          <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp">
+        </label>
+        <img id="imagePreview" class="image-preview hidden" alt="Selected screenshot preview">
+        <div class="button-row">
+          <button class="primary-btn" id="extractText">Extract and analyze text</button>
+          <button class="secondary-btn" id="clearImage">Clear image</button>
+        </div>
+        <p class="helper-text" id="ocrStatus">OCR requires an internet connection to load its text-recognition library.</p>
+        <div class="progress-track hidden" id="ocrProgress"><div id="ocrProgressBar"></div></div>
+        <label for="ocrText">Extracted text (you can edit it)</label>
+        <textarea id="ocrText" rows="7" placeholder="Extracted text will appear here. You can also paste text manually."></textarea>
+        <button class="secondary-btn full-btn" id="analyzeOcrText">Analyze this text</button>
+        <div id="ocrResult" class="result-slot" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="page" id="history">
+      <div class="page-heading"><span class="eyebrow">SAVED ON THIS DEVICE</span><h1>Analysis History</h1><p>Review previous checks saved in this browser.</p></div>
+      <div class="panel">
+        <div class="panel-heading wrap-heading">
+          <h2>Previous analyses</h2>
+          <div class="button-row">
+            <button class="secondary-btn" id="exportHistory">Export CSV</button>
+            <button class="danger-btn" id="clearHistory">Clear history</button>
+          </div>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </section>
+
+    <section class="page" id="tips">
+      <div class="page-heading"><span class="eyebrow">STAY PROTECTED</span><h1>Cybersecurity Tips</h1><p>Simple habits that can help you avoid scams and phishing.</p></div>
+      <div class="tips-grid">
+        <article class="tip-card"><span>🔐</span><h3>Protect your passwords</h3><p>Use unique passwords for important accounts and a reputable password manager. Never share one-time codes.</p></article>
+        <article class="tip-card"><span>🔗</span><h3>Check links carefully</h3><p>Inspect the real domain before signing in. A familiar brand name in a URL does not prove that the site is genuine.</p></article>
+        <article class="tip-card"><span>⏳</span><h3>Do not rush</h3><p>Messages threatening immediate account closure or promising unexpected prizes may be trying to pressure you.</p></article>
+        <article class="tip-card"><span>📱</span><h3>Verify independently</h3><p>Contact a bank, delivery service, or organization through its official app or a number you already trust.</p></article>
+        <article class="tip-card"><span>🛡️</span><h3>Enable two-factor authentication</h3><p>Add an extra layer of protection to your accounts whenever it is available.</p></article>
+        <article class="tip-card"><span>🔄</span><h3>Keep devices updated</h3><p>Install operating-system, browser, and application security updates regularly.</p></article>
+        <article class="tip-card"><span>💳</span><h3>Never pay to claim a prize</h3><p>Be cautious of unexpected fees, gift-card payments, cryptocurrency transfers, or requests for banking details.</p></article>
+        <article class="tip-card"><span>📢</span><h3>Report suspicious activity</h3><p>Report suspected scams to the relevant platform or financial institution. If you entered a password, change it through the official site.</p></article>
+      </div>
+    </section>
+
+    <footer>ProofCheck AI · Educational cybersecurity tool · Results are estimates, not guarantees.</footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
